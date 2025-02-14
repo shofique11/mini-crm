@@ -53,8 +53,12 @@ class AuthController extends BaseController
 
     // Logout User
     public function logout() {
-        auth()->logout();
-        return response()->json(['message' => 'Successfully logged out']);
+        try {
+            auth()->logout();
+            return response()->json(['message' => 'Successfully logged out'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Something went wrong'], 500);
+        }
     }
 
     // Refresh JWT Token
