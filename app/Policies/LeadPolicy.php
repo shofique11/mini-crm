@@ -38,7 +38,7 @@ class LeadPolicy
      */
     public function update(User $user, Lead $lead): bool
     {
-        return $user->role === 'counselor' && $lead->id >= 0;
+        return $user->id === $lead->counselor_id && $lead->id >= 0;
     }
 
     /**

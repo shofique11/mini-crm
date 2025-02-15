@@ -11,7 +11,7 @@ class StoreApplicationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,26 @@ class StoreApplicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'lead_id' => 'required|integer',
+            'counselor_id' => 'required|integer|exists:users,id',
+            'status' => 'required|in:In Progress,Approved,Rejected',
         ];
+    }
+    public function messages(): array
+    {
+        return [
+            'lead_id.required' => 'The lead id is required.',
+            'counselor_id.required' => 'The counselor is required.',
+            'status.required' => 'The status is required.',
+            'status.in' => 'The status must be one of the following: In Progress, Approved, Rejected.',
+        ];
+    }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        throw new \Illuminate\Validation\ValidationException($validator, response()->json([
+            'message' => 'Validation error',
+            'errors' => $validator->errors()
+        ], 422));
     }
 }

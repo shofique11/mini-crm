@@ -25,6 +25,7 @@ Route::middleware('auth:api')->group(function () {
             return response()->json(['message' => 'Welcome, Admin!']);
         });
         Route::get('leads', [LeadController::class, 'index']);  // View all leads (admin only)
+        Route::post('applications', [ApplicationController::class, 'store']);  // Assign an application (admin only)
         Route::get('applications', [ApplicationController::class, 'index']);  // View all applications (admin only)
     });
 
@@ -36,8 +37,6 @@ Route::middleware('auth:api')->group(function () {
         Route::post('leads', [LeadController::class, 'store']);  // Create a lead (counselor only)
         Route::put('leads/{lead}', [LeadController::class, 'update']);  // Update a lead (counselor only)
         Route::get('leads/{lead}', [LeadController::class, 'show']);  // Show a lead (counselor only)
-        
-        Route::post('applications', [ApplicationController::class, 'store']);  // Create an application (counselor only)
         Route::put('applications/{application}', [ApplicationController::class, 'update']);  // Update an application (counselor only)
     });
 

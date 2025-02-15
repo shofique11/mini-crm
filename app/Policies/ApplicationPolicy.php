@@ -13,7 +13,7 @@ class ApplicationPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +21,7 @@ class ApplicationPolicy
      */
     public function view(User $user, Application $application): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -29,7 +29,7 @@ class ApplicationPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->role === 'admin';
     }
 
     /**
@@ -37,7 +37,7 @@ class ApplicationPolicy
      */
     public function update(User $user, Application $application): bool
     {
-        return false;
+        return $user->role === 'counselor' && $application->id >= 0;
     }
 
     /**
@@ -45,7 +45,7 @@ class ApplicationPolicy
      */
     public function delete(User $user, Application $application): bool
     {
-        return false;
+        return true;
     }
 
     /**

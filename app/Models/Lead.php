@@ -9,7 +9,7 @@ class Lead extends Model
 {
     /** @use HasFactory<\Database\Factories\LeadFactory> */
     use HasFactory;
-    protected $fillable = ['name','email','phone','status','assigned_to'];
+    protected $fillable = ['name','email','phone','status','counselor_id'];
 
     public static function statuses()
     {
@@ -21,7 +21,7 @@ class Lead extends Model
      */
     public function counselor()
     {
-        return $this->belongsTo(User::class, 'assigned_to');
+        return $this->belongsTo(User::class, 'counselor_id');
     }
     /**
      * Relationship: A lead can have one application
