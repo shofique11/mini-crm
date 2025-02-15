@@ -1,20 +1,15 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\API\BaseController;
-use App\Models\Lead;
 use App\Http\Requests\StoreLeadRequest;
 use App\Http\Requests\UpdateLeadRequest;
+use App\Models\Lead;
 use App\Repositories\Interfaces\LeadRepositoryInterface;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class LeadController extends BaseController
 {
-    use AuthorizesRequests;
 
     protected $leadRepository;
 
@@ -23,9 +18,6 @@ class LeadController extends BaseController
         $this->leadRepository = $leadRepository;
     }
 
-    /**
-     * Send error response.
-     */
     public function sendError($error, $errorMessages = [], $code = 404)
     {
         $response = [
@@ -33,94 +25,55 @@ class LeadController extends BaseController
             'message' => $error,
         ];
 
-        if(!empty($errorMessages)){
+        if (! empty($errorMessages)) {
             $response['data'] = $errorMessages;
         }
 
         return response()->json($response, $code);
     }
-    
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        //return response()->json($this->leadRepository->getAllLeads());
+        $success['leads'] = $this->leadRepository->getAllLeads();
+        return $this->sendResponse($success, 'All leads showed successfully.', 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request)
-    {
-        
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreLeadRequest $request)
     {
-       
-        //$this->authorize('create', Lead::class);
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:leads',
-            'phone' => 'nullable|string',
-            'status' => 'required|in:In Progress,Bad Timing,Not Interested,Not Qualified',
-            'counselor_id' => 'required|exists:users,id',
-         ]);
-       
-         $request['assigned_to' ] = $request['counselor_id'];
-         if($validator->fails()){
-             return $this->sendError('Validation Error.', $validator->errors());       
-         }
-        
-         $success['lead'] =  $this->leadRepository->createLead($request->all());
-         return $this->sendResponse($success, 'Lead created successfully.', 201);
+        if (Gate::denies('create', Lead::class)) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+        $request['assigned_to'] = $request['counselor_id'];
+        $success['lead']        = $this->leadRepository->createLead($request->all());
+        return $this->sendResponse($success, 'Lead created successfully.', 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Lead $lead)
     {
-        //
+        $success['leads'] = $this->leadRepository->getLeadById($lead->id);
+        return $this->sendResponse($success, 'Lead details showed successfully.', 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Lead $lead)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateLeadRequest $request, Lead $lead)
     {
-        $validator = Validator::make($request->all(), [
-            'status' => 'required|in:In Progress,Bad Timing,Not Interested,Not Qualified',
-         ]);
- 
-         if($validator->fails()){
-             return $this->sendError('Validation Error.', $validator->errors());       
-         }
-
-         $success['lead'] =  $this->leadRepository->getLeadById($lead->id);
-         return $this->sendResponse($success, 'Lead updated successfully.', 200);
+        // Ensure lead exists
+        if (! $lead) {
+            return response()->json(['message' => 'Lead not found.'], 404);
+        }
+        if (Gate::denies('update', $lead)) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+        $success['lead'] = $this->leadRepository->updateLead($lead, $request->all());
+        return $this->sendResponse($success, 'Lead updated successfully.', 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Lead $lead)
     {
-        //$this->leadRepository->deleteLead($lead->id);
-        return response()->json(['message' => 'Lead deleted successfully']);
+         
+        if (Gate::denies('delete', $lead)) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+        $this->leadRepository->deleteLead($lead->id);
+        return response()->json(['message' => 'Lead deleted successfully', 200]);
     }
 }

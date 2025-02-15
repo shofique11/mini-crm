@@ -27,18 +27,5 @@ class RoleMiddleware
         }
         Log::info('User Role:', ['role' => Auth::user()->role]);
         return $next($request);
-       
-        // if (Auth::user()->role !== $role) {
-        //     return response()->json(['error' => 'Access denied'], 403);
-        // }
-    //     if (!Auth::check()) {
-    //         return response()->json(['message' => 'Unauthorized'], 401);
-    //     }
-    // dd($request->user()->hasRole($role));
-    //     if (!$request->user()->hasRole($role)) {  // Check user's role
-    //         return response()->json(['message' => 'Forbidden'], 403);
-    //     }
-    //     Log::info('User Role:', ['role' => Auth::user()->role]);
-    //     return $next($request);
     }
 }

@@ -30,7 +30,7 @@ class LeadPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role === 'admin' || $user->role === 'counselor';
+        return $user->role === 'counselor';
     }
 
     /**
@@ -38,7 +38,7 @@ class LeadPolicy
      */
     public function update(User $user, Lead $lead): bool
     {
-        return ($user->role === 'admin' || $user->role === 'counselor') && $lead->id >= 0;
+        return $user->role === 'counselor' && $lead->id >= 0;
     }
 
     /**
@@ -46,7 +46,7 @@ class LeadPolicy
      */
     public function delete(User $user, Lead $lead): bool
     {
-        return false;
+        return $user->role === 'admin';
     }
 
     /**
