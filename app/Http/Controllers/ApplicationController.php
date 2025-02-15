@@ -33,7 +33,7 @@ class ApplicationController extends BaseController
         if (Gate::denies('create', Application::class)) {
             return response()->json(['message' => 'Unauthorized.'], 403);
         }
-        $success['applications']        = $this->applicationRepository->createApplication($request->all());
+        $success['applications'] = $this->applicationRepository->createApplication($request->all());
         return $this->sendResponse($success, 'Application created successfully.', 201);
     }
 
