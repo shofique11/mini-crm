@@ -67,4 +67,17 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+    // public function hasRole($role)
+    // {
+    //     return $this->role === $role; // or adjust according to your role structure
+    // }
+    // public function isAdmin()
+    // {
+    //     return $this->role === 'admin';
+    // }
+
+    // public function isCounselor()
+    // {
+    //     return $this->role === 'counselor';
+    // }
 }

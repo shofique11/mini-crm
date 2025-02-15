@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Lead;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Auth;
 
 class LeadPolicy
 {
@@ -13,7 +14,7 @@ class LeadPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +22,7 @@ class LeadPolicy
      */
     public function view(User $user, Lead $lead): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -29,7 +30,7 @@ class LeadPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->role === 'admin' || $user->role === 'counselor';
     }
 
     /**
@@ -37,7 +38,7 @@ class LeadPolicy
      */
     public function update(User $user, Lead $lead): bool
     {
-        return false;
+        return ($user->role === 'admin' || $user->role === 'counselor') && $lead->id >= 0;
     }
 
     /**
