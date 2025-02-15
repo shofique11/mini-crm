@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\API\BaseController;
 use App\Models\Lead;
 use App\Http\Requests\StoreLeadRequest;
 use App\Http\Requests\UpdateLeadRequest;
@@ -11,18 +12,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 
-class LeadController extends Controller
+class LeadController extends BaseController
 {
     use AuthorizesRequests;
-   
-
-    // public function __construct()
-    // {
-    //    dd("create laed");
-    // }
-    /**
-     * Send error response.
-     */
 
     protected $leadRepository;
 
@@ -30,6 +22,10 @@ class LeadController extends Controller
     {
         $this->leadRepository = $leadRepository;
     }
+
+    /**
+     * Send error response.
+     */
     public function sendError($error, $errorMessages = [], $code = 404)
     {
         $response = [
@@ -67,7 +63,7 @@ class LeadController extends Controller
     public function store(StoreLeadRequest $request)
     {
        
-        $this->authorize('create', Lead::class);
+        //$this->authorize('create', Lead::class);
 
         $validator = Validator::make($request->all(), [
             'name' => 'required',
@@ -81,8 +77,9 @@ class LeadController extends Controller
          if($validator->fails()){
              return $this->sendError('Validation Error.', $validator->errors());       
          }
-
-        return response()->json($this->leadRepository->createLead($request->all()), 201);
+        
+         $success['lead'] =  $this->leadRepository->createLead($request->all());
+         return $this->sendResponse($success, 'Lead created successfully.', 201);
     }
 
     /**
@@ -113,7 +110,9 @@ class LeadController extends Controller
          if($validator->fails()){
              return $this->sendError('Validation Error.', $validator->errors());       
          }
-       // return response()->json($this->leadRepository->getLeadById($lead->id));
+
+         $success['lead'] =  $this->leadRepository->getLeadById($lead->id);
+         return $this->sendResponse($success, 'Lead updated successfully.', 200);
     }
 
     /**
