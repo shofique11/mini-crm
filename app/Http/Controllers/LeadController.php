@@ -43,7 +43,6 @@ class LeadController extends BaseController
         if (Gate::denies('create', Lead::class)) {
             return response()->json(['message' => 'Unauthorized.'], 403);
         }
-        $request['assigned_to'] = $request['counselor_id'];
         $success['lead']        = $this->leadRepository->createLead($request->all());
         return $this->sendResponse($success, 'Lead created successfully.', 201);
     }
@@ -63,7 +62,7 @@ class LeadController extends BaseController
         if (Gate::denies('update', $lead)) {
             return response()->json(['message' => 'Unauthorized.'], 403);
         }
-        $success['lead'] = $this->leadRepository->updateLead($lead, $request->all());
+        $success['lead'] = $this->leadRepository->updateLead($lead, $request->only('status'));
         return $this->sendResponse($success, 'Lead updated successfully.', 200);
     }
 

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone');
-            $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('counselor_id')->nullable()->constrained('users')->onDelete('set null');
             $table->enum('status', ['In progress', 'Bad Timing', 'Not Interested', 'Not Qualified'])->default('In progress');
             $table->timestamps();
         });

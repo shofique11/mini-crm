@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('lead_id')->unique()->constrained('leads')->onDelete('cascade');
-            $table->foreignId('assigned_to')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('counselor_id')->nullable()->constrained('users')->onDelete('set null');
             $table->enum('status', ['In Progress', 'Approved', 'Rejected'])->default('In Progress');
             $table->timestamps();
         });

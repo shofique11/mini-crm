@@ -2,12 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\API\BaseController;
 use App\Models\Application;
 use App\Http\Requests\StoreApplicationRequest;
 use App\Http\Requests\UpdateApplicationRequest;
+use App\Repositories\Interfaces\ApplicationRepositoryInterface;
+use Illuminate\Support\Facades\Gate;
 
-class ApplicationController extends Controller
+class ApplicationController extends BaseController
 {
+    protected $applicationRepository;
+
+    public function __construct(ApplicationRepositoryInterface $applicationRepository)
+    {
+        $this->applicationRepository = $applicationRepository;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -17,19 +26,15 @@ class ApplicationController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreApplicationRequest $request)
     {
-        //
+        if (Gate::denies('create', Application::class)) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+        $success['applications']        = $this->applicationRepository->createApplication($request->all());
+        return $this->sendResponse($success, 'Application created successfully.', 201);
     }
 
     /**
@@ -41,26 +46,18 @@ class ApplicationController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Application $application)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(UpdateApplicationRequest $request, Application $application)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Application $application)
-    {
-        //
+         // Ensure lead exists
+         if (! $application) {
+            return response()->json(['message' => 'Lead not found.'], 404);
+        }
+        if (Gate::denies('update', $application)) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+        $success['application'] = $this->applicationRepository->updateApplication($application, $request->only('status'));
+        return $this->sendResponse($success, 'Lead updated successfully.', 200);
     }
 }
