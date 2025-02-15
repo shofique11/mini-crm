@@ -23,9 +23,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->registerPolicies(); // This automatically registers the policies
-
-        // Define a gate for lead creation
-        Gate::define('create-lead', [LeadPolicy::class, 'create']);
+        $this->registerPolicies(); 
     }
 }
