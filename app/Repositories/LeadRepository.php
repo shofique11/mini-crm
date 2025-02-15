@@ -29,9 +29,9 @@ class LeadRepository implements LeadRepositoryInterface
         return Lead::create($data);
     }
 
-    public function updateLead($id, array $data)
+    public function updateLead($lead, array $data)
     {
-        $lead = Lead::findOrFail($id);
+        $lead = Lead::findOrFail($lead->id);
         $lead->update($data);
         return $lead;
     }

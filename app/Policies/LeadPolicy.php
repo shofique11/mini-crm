@@ -14,7 +14,7 @@ class LeadPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return $user->role === 'admin';
     }
 
     /**
@@ -22,7 +22,7 @@ class LeadPolicy
      */
     public function view(User $user, Lead $lead): bool
     {
-        return true;
+        return ($user->role === 'admin' || $user->role === 'counselor') && isset($lead);
     }
 
     /**

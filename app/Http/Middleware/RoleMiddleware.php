@@ -16,12 +16,12 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, $role): Response
     {
-       
+      
         // Check if the user is authenticated
         if (!Auth::check()) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-       
+      
         if (Auth::user()->role !== $role) {
             return response()->json(['error' => 'Access denied'], 403);
         }
