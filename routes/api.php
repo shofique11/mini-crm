@@ -16,27 +16,29 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/me', [AuthController::class, 'me']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
 
+    // Admin Routes
     Route::middleware('role:admin')->group(function () {
         Route::get('/admin-dashboard', function () {
             return response()->json(['message' => 'Welcome, Admin!']);
         });
+        Route::get('leads', [LeadController::class, 'index']);  // View all leads (admin only)
+        Route::get('applications', [ApplicationController::class, 'index']);  // View all applications (admin only)
     });
 
+    // Counselor Routes
     Route::middleware('role:counselor')->group(function () {
         Route::get('/counselor-dashboard', function () {
             return response()->json(['message' => 'Welcome, Counselor!']);
         });
+        Route::post('leads', [LeadController::class, 'store']);  // Create a lead (counselor only)
+        Route::put('leads/{lead}', [LeadController::class, 'update']);  // Update a lead (counselor only)
+        
+        Route::post('applications', [ApplicationController::class, 'store']);  // Create an application (counselor only)
+        Route::put('applications/{application}', [ApplicationController::class, 'update']);  // Update an application (counselor only)
     });
 
-    // Admin routes
-    Route::middleware('role:admin')->get('/leads', [LeadController::class, 'index']);
-
-    // Counselor routes
-    Route::middleware('role:counselor')->post('/leads', [LeadController::class, 'store']);
-    Route::middleware('role:counselor')->put('/leads/{lead}', [LeadController::class, 'update']);
-    Route::middleware('role:counselor')->post('/applications', [ApplicationController::class, 'store']);
-    Route::middleware('role:counselor')->put('/applications/{application}', [ApplicationController::class, 'update']);
 });
 
