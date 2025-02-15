@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\API\BaseController;
 use App\Models\Application;
 use App\Http\Requests\StoreApplicationRequest;
-use App\Http\Requests\UpdateApplicationRequest;
 use App\Repositories\Interfaces\ApplicationRepositoryInterface;
+use App\Http\Requests\UpdateApplicationRequest;
+
 use Illuminate\Support\Facades\Gate;
 
 class ApplicationController extends BaseController
@@ -17,17 +18,12 @@ class ApplicationController extends BaseController
     {
         $this->applicationRepository = $applicationRepository;
     }
-    /**
-     * Display a listing of the resource.
-     */
+   
     public function index()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreApplicationRequest $request)
     {
         if (Gate::denies('create', Application::class)) {
