@@ -18,20 +18,6 @@ class LeadController extends BaseController
         $this->leadRepository = $leadRepository;
     }
 
-    public function sendError($error, $errorMessages = [], $code = 404)
-    {
-        $response = [
-            'success' => false,
-            'message' => $error,
-        ];
-
-        if (! empty($errorMessages)) {
-            $response['data'] = $errorMessages;
-        }
-
-        return response()->json($response, $code);
-    }
-
     public function index()
     {
         $success['leads'] = $this->leadRepository->getAllLeads();
@@ -43,12 +29,17 @@ class LeadController extends BaseController
         if (Gate::denies('create', Lead::class)) {
             return response()->json(['message' => 'Unauthorized.'], 403);
         }
-        $success['lead']        = $this->leadRepository->createLead($request->all());
+        $success['lead'] = $this->leadRepository->createLead($request->all());
         return $this->sendResponse($success, 'Lead created successfully.', 201);
     }
 
     public function show(Lead $lead)
     {
+
+        if (Gate::denies('view', $lead)) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+       
         $success['leads'] = $this->leadRepository->getLeadById($lead->id);
         return $this->sendResponse($success, 'Lead details showed successfully.', 200);
     }
@@ -62,8 +53,9 @@ class LeadController extends BaseController
         if (Gate::denies('update', $lead)) {
             return response()->json(['message' => 'Unauthorized.'], 403);
         }
-        $success['lead'] = $this->leadRepository->updateLead($lead, $request->only('status'));
-        return $this->sendResponse($success, 'Lead updated successfully.', 200);
+
+         $success['lead'] = $this->leadRepository->updateLead($lead, $request->all());
+         return $this->sendResponse($success, 'Lead updated successfully.', 200);
     }
 
     public function destroy(Lead $lead)

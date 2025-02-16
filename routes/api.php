@@ -27,6 +27,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('leads', [LeadController::class, 'index']);  // View all leads (admin only)
         Route::post('applications', [ApplicationController::class, 'store']);  // Assign an application (admin only)
         Route::get('applications', [ApplicationController::class, 'index']);  // View all applications (admin only)
+        Route::get('applications/{application}', [ApplicationController::class, 'show']);  // View single applications (admin only)
     });
 
     // Counselor Routes

@@ -36,7 +36,7 @@ class StoreLeadRequest extends FormRequest
             'name.required' => 'The lead name is required.',
             'email.required' => 'The email address is required.',
             'email.email' => 'Please enter a valid email address.',
-            'email.unique' => 'This email is already assigned to another lead.',
+            'email.unique' => 'This email is already contained another lead.',
             'phone.string' => 'The phone number must be a string.',
             'status.required' => 'The status is required.',
             'status.in' => 'The status must be one of the following: In Progress, Bad Timing, Not Interested, Not Qualified.',

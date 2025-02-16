@@ -22,18 +22,23 @@ class StoreApplicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'lead_id' => 'required|integer',
-            'counselor_id' => 'required|integer|exists:users,id',
+            'lead_id' => 'required|integer|unique:applications',
+            'counselor_id' => 'required|integer',
             'status' => 'required|in:In Progress,Approved,Rejected',
+            'lead_id' => 'required|exists:leads,id',
+            'counselor_id' => 'required|exists:users,id',
         ];
     }
     public function messages(): array
     {
         return [
             'lead_id.required' => 'The lead id is required.',
+            'lead_id.unique' => 'This lead is already assigned to another counselor.',
             'counselor_id.required' => 'The counselor is required.',
             'status.required' => 'The status is required.',
             'status.in' => 'The status must be one of the following: In Progress, Approved, Rejected.',
+            'lead_id.exists' => 'The selected lead does not exist.',
+            'counselor_id.exists' => 'The selected counselor does not exist.',
         ];
     }
 

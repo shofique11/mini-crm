@@ -22,13 +22,20 @@ class UpdateLeadRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'name' => 'sometimes|required|string|max:255',
+            'email' => 'sometimes|required|email|unique:leads,email,' . $this->lead->id,
+            'phone' => 'nullable|string',
             'status' => 'required|in:In Progress,Bad Timing,Not Interested,Not Qualified',
         ];
     }
 
     public function messages(): array
     {
+       
         return [
+            'name.required' => 'The lead name is required.',
+            'email.required' => 'The email address is required.',
+            'email.unique' => 'This email is already assigned to another lead.',
             'status.required' => 'The status is required.',
             'status.in' => 'Invalid status. Choose from In Progress, Bad Timing, Not Interested, or Not Qualified.',
         ];
