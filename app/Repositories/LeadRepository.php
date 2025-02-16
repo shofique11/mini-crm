@@ -40,4 +40,7 @@ class LeadRepository implements LeadRepositoryInterface
     {
         return Lead::destroy($id);
     }
+    public function getLeadByCounselor($user_id){
+        return Lead::where('counselor_id', $user_id)->get();
+    }
 }

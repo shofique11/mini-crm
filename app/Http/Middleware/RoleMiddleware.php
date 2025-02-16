@@ -14,16 +14,18 @@ class RoleMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, $role): Response
+    public function handle(Request $request, Closure $next, $roles): Response
     {
-      
+     
         // Check if the user is authenticated
         if (!Auth::check()) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-      
-        if (Auth::user()->role !== $role) {
-            return response()->json(['error' => 'Access denied'], 403);
+
+        $rolesArray = explode(',', $roles);
+
+        if (!in_array(Auth::user()->role, $rolesArray)) {
+            return response()->json(['message' => 'access denied'], 403);
         }
         Log::info('User Role:', ['role' => Auth::user()->role]);
         return $next($request);

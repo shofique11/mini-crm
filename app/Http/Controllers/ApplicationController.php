@@ -16,6 +16,7 @@ class ApplicationController extends BaseController
 
     public function __construct(ApplicationRepositoryInterface $applicationRepository)
     {
+
         $this->applicationRepository = $applicationRepository;
     }
    

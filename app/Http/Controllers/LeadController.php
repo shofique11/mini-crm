@@ -6,6 +6,7 @@ use App\Http\Requests\StoreLeadRequest;
 use App\Http\Requests\UpdateLeadRequest;
 use App\Models\Lead;
 use App\Repositories\Interfaces\LeadRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class LeadController extends BaseController
@@ -35,7 +36,7 @@ class LeadController extends BaseController
 
     public function show(Lead $lead)
     {
-
+        
         if (Gate::denies('view', $lead)) {
             return response()->json(['message' => 'Unauthorized.'], 403);
         }
@@ -44,6 +45,11 @@ class LeadController extends BaseController
         return $this->sendResponse($success, 'Lead details showed successfully.', 200);
     }
 
+    public function counselorLeads() 
+    {
+        $success['leads'] = $this->leadRepository->getLeadByCounselor(Auth::user()->id);
+        return $this->sendResponse($success, 'Lead details showed successfully.', 200);
+    }
     public function update(UpdateLeadRequest $request, Lead $lead)
     {
         // Ensure lead exists

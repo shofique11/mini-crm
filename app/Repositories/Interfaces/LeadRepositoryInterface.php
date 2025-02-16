@@ -9,4 +9,5 @@ interface LeadRepositoryInterface
     public function createLead(array $data);
     public function updateLead($id, array $data);
     public function deleteLead($id);
+    public function getLeadByCounselor($id);
 }
