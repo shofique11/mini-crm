@@ -35,7 +35,7 @@ class LeadController extends BaseController
 
     public function show(Lead $lead)
     {
-
+        
         if (Gate::denies('view', $lead)) {
             return response()->json(['message' => 'Unauthorized.'], 403);
         }

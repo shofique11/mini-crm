@@ -25,9 +25,8 @@ Route::middleware('auth:api')->group(function () {
             return response()->json(['message' => 'Welcome, Admin!']);
         });
         Route::get('leads', [LeadController::class, 'index']);  // View all leads (admin only)
-        Route::post('applications', [ApplicationController::class, 'store']);  // Assign an application (admin only)
-        Route::get('applications', [ApplicationController::class, 'index']);  // View all applications (admin only)
-        Route::get('applications/{application}', [ApplicationController::class, 'show']);  // View single applications (admin only)
+        Route::post('leads', [LeadController::class, 'store']);  // Create a lead (admin only)
+        Route::put('leads/{lead}', [LeadController::class, 'update']);  // Update a lead (admin only)
     });
 
     // Counselor Routes
@@ -35,10 +34,15 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/counselor-dashboard', function () {
             return response()->json(['message' => 'Welcome, Counselor!']);
         });
-        Route::post('leads', [LeadController::class, 'store']);  // Create a lead (counselor only)
-        Route::put('leads/{lead}', [LeadController::class, 'update']);  // Update a lead (counselor only)
-        Route::get('leads/{lead}', [LeadController::class, 'show']);  // Show a lead (counselor only)
+        Route::post('applications', [ApplicationController::class, 'store']);  // Move application (counselor only)
         Route::put('applications/{application}', [ApplicationController::class, 'update']);  // Update an application (counselor only)
+    });
+
+    // admin and Counselor common Routes
+    Route::middleware(['role:admin,counselor'])->group(function () {
+        Route::get('leads/{lead}', [LeadController::class, 'show']);  
+        Route::get('applications/{application}', [ApplicationController::class, 'show']); 
+        Route::get('applications', [ApplicationController::class, 'index']);  // View all applications (admin only)
     });
 
 });

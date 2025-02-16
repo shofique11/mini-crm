@@ -22,7 +22,7 @@ class LeadPolicy
      */
     public function view(User $user, Lead $lead): bool
     {
-        return ($user->role === 'admin' || $user->role === 'counselor') && isset($lead);
+        return ($user->role === 'admin' || $user->role === 'counselor')  && isset($lead);
     }
 
     /**
@@ -30,7 +30,7 @@ class LeadPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role === 'counselor';
+        return $user->role === 'admin';
     }
 
     /**
@@ -38,7 +38,7 @@ class LeadPolicy
      */
     public function update(User $user, Lead $lead): bool
     {
-        return $user->id === $lead->counselor_id && $lead->id >= 0;
+        return ($user->role === 'admin' || $user->role === 'counselor')  && $lead->id >= 0;
     }
 
     /**
@@ -54,7 +54,7 @@ class LeadPolicy
      */
     public function restore(User $user, Lead $lead): bool
     {
-        return false;
+        return true;
     }
 
     /**

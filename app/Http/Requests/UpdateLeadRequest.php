@@ -38,6 +38,7 @@ class UpdateLeadRequest extends FormRequest
             'email.unique' => 'This email is already assigned to another lead.',
             'status.required' => 'The status is required.',
             'status.in' => 'Invalid status. Choose from In Progress, Bad Timing, Not Interested, or Not Qualified.',
+            'counselor_id.exists' => 'The selected counselor does not exist.',
         ];
     }
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
