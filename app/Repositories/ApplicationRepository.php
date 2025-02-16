@@ -5,37 +5,33 @@ use App\Models\Application;
 use App\Repositories\Interfaces\ApplicationRepositoryInterface;
 class ApplicationRepository implements ApplicationRepositoryInterface
 {
-    /**
-     * Create a new class instance.
-     */
+   
     public function __construct()
     {
         //
     }
 
-    /**
-     * Create a new application.
-     *
-     * @param array $data
-     * @return Application
-     */
+    public function getAllApplication()
+    {
+        return Application::with('counselor')->get();
+    }
+
+    public function getApplicationById($id)
+    {
+        return Application::with('counselor')->findOrFail($id);
+    }
+   
     public function createApplication(array $data): Application
     {
         return Application::create($data);
     }
 
-    /**
-     * Update an existing application.
-     *
-     * @param int $id
-     * @param array $data
-     * @return bool
-     */
-    public function updateApplication($id, array $data): bool
+    public function updateApplication($application, array $data)
     {
-        $application = Application::find($id);
+        $application = Application::find($application->id);
         if ($application) {
-            return $application->update($data);
+             $application->update($data);
+             return $data;
         }
         return false;
     }

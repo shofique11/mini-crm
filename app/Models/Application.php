@@ -15,4 +15,9 @@ class Application extends Model
     {
         return $this->belongsTo(Lead::class);
     }
+
+    public function counselor()
+    {
+        return $this->belongsTo(User::class, 'counselor_id');
+    }
 }

@@ -21,7 +21,7 @@ class ApplicationPolicy
      */
     public function view(User $user, Application $application): bool
     {
-        return true;
+        return $user->role === 'admin' || $user->id === $application->counselor_id;
     }
 
     /**
@@ -37,7 +37,7 @@ class ApplicationPolicy
      */
     public function update(User $user, Application $application): bool
     {
-        return $user->role === 'counselor' && $application->id >= 0;
+        return $user->role === 'counselor' && $user->id === $application->counselor_id && $application->id >= 0;
     }
 
     /**
