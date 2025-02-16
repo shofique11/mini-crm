@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\UserController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -27,6 +28,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('leads', [LeadController::class, 'index']);  // View all leads (admin only)
         Route::post('leads', [LeadController::class, 'store']);  // Create a lead (admin only)
         Route::put('leads/{lead}', [LeadController::class, 'update']);  // Update a lead (admin only)
+        Route::get('counselor-list', [UserController::class, 'counselorList']);  // View all counselor (admin only)
     });
 
     // Counselor Routes
