@@ -1,6 +1,11 @@
 ## Requirement stack
 <p>php apache server, Mysql database, Composer<p>
+
 ## clone the github link
+```
+git clone https://github.com/shofique11/mini-crm.git
+```
+## install the dependency
 ```
  composer install
 ```
