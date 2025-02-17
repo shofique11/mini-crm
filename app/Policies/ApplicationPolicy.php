@@ -37,7 +37,7 @@ class ApplicationPolicy
      */
     public function update(User $user, Application $application): bool
     {
-       return $user->role === 'counselor' && $user->id === $application->counselor_id && $application->id >= 0;
+       return $user->role === 'admin' && $application->id >= 0;
     }
 
     /**
