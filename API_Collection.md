@@ -1,4 +1,9 @@
 
+## Base Url
+```
+http://localhost:8000
+
+```
 ## registration api
 
 ```
@@ -44,6 +49,7 @@ Header:
 ## Create Lead API
 
 ```
+Only Admin create lead
 endpoint: api/leads;
 Method:POST
 Header:
@@ -58,10 +64,11 @@ JSON
     "status": "In Progress",
     "counselor_id": 2
 }
-Only Admin create lead
+
 ```
 ## Update Lead API
 ```
+Counselor update lead
 endpoint: api/leads/{id};
 Method:POST
 Header:
@@ -76,7 +83,7 @@ JSON
     "status": "In Progress",
     "counselor_id": 2
 }
-Counselor update lead
+
 
 ```
 ## Viewe all Lead API
@@ -127,7 +134,7 @@ Header:
 }
 ```
 
-## View All Application
+## Admin View All Application
 ```
 endpoint: api/applications;
 Method:GET
