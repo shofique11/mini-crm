@@ -31,6 +31,10 @@ php artisan migrate
 ```
 php artisan jwt:secret
 ```
+## DB seed for 1 admin and 4 counselor
+```
+php artisan db:seed
+```
 
 ## Run the project
 ```
