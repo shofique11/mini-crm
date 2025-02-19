@@ -16,7 +16,9 @@ class LeadRepository implements LeadRepositoryInterface
 
     public function getAllLeads()
     {
-        return Lead::with('counselor')->get();
+        return Lead::with('counselor')
+        ->whereDoesntHave('application')
+        ->get();
     }
 
     public function getLeadById($id)

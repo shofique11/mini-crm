@@ -14,7 +14,7 @@ class ApplicationRepository implements ApplicationRepositoryInterface
 
     public function getAllApplication()
     {
-        return Application::with('counselor')->get();
+        return Application::with('counselor')->with('lead')->get();
     }
 
     public function getApplicationById($id)
