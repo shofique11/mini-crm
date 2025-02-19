@@ -43,7 +43,9 @@ Route::middleware('auth:api')->group(function () {
         });
        // Route::put('leads/{lead}', [LeadController::class, 'update']);
         Route::get('counselor-leads', [LeadController::class, 'counselorLeads']);  
+        Route::put('/leads/{id}/status', [LeadController::class, 'updateStatus']);
         Route::post('applications', [ApplicationController::class, 'store']);  // Move application (counselor only)
+        Route::get('my-applications', [ApplicationController::class, 'myApplication']);
     });
 });
 
