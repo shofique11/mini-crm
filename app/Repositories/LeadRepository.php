@@ -16,7 +16,9 @@ class LeadRepository implements LeadRepositoryInterface
 
     public function getAllLeads()
     {
-        return Lead::with('counselor')->get();
+        return Lead::with('counselor')
+        ->whereDoesntHave('application')
+        ->get();
     }
 
     public function getLeadById($id)
@@ -41,6 +43,8 @@ class LeadRepository implements LeadRepositoryInterface
         return Lead::destroy($id);
     }
     public function getLeadByCounselor($user_id){
-        return Lead::where('counselor_id', $user_id)->get();
+        return Lead::where('counselor_id', $user_id) // Get only the leads of this user
+        ->whereDoesntHave('application')  // Exclude leads that already have an application
+        ->get();
     }
 }

@@ -62,4 +62,13 @@ class ApplicationController extends BaseController
         $success['application'] = $this->applicationRepository->updateApplication($application, $request->only('status'));
         return $this->sendResponse($success, 'Application updated successfully.', 200);
     }
+
+    public function myApplication(){
+
+        if (Gate::denies('viewAny', Application::class)) {
+            return response()->json(['message' => 'Unauthorized.'], 403);
+        }
+        $success['user_applications'] = $this->applicationRepository->getMyApplication();
+        return $this->sendResponse($success, 'User application showed successfully.', 200);
+    }
 }

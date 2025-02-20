@@ -25,8 +25,8 @@ class StoreLeadRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:leads,email',
             'phone' => 'nullable|string|max:20',
-            'status' => 'required|in:In Progress,Bad Timing,Not Interested,Not Qualified',
-            'counselor_id' => 'required|exists:users,id',
+            //'status' => 'required|in:In Progress,Bad Timing,Not Interested,Not Qualified',
+            // 'counselor_id' => 'required|exists:users,id',
         ];
     }
 
@@ -38,10 +38,10 @@ class StoreLeadRequest extends FormRequest
             'email.email' => 'Please enter a valid email address.',
             'email.unique' => 'This email is already contained another lead.',
             'phone.string' => 'The phone number must be a string.',
-            'status.required' => 'The status is required.',
-            'status.in' => 'The status must be one of the following: In Progress, Bad Timing, Not Interested, Not Qualified.',
-            'counselor_id.required' => 'A counselor must be assigned to the lead.',
-            'counselor_id.exists' => 'The selected counselor does not exist.',
+            //'status.required' => 'The status is required.',
+            //'status.in' => 'The status must be one of the following: In Progress, Bad Timing, Not Interested, Not Qualified.',
+            // 'counselor_id.required' => 'A counselor must be assigned to the lead.',
+            // 'counselor_id.exists' => 'The selected counselor does not exist.',
         ];
     }
 

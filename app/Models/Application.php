@@ -20,4 +20,7 @@ class Application extends Model
     {
         return $this->belongsTo(User::class, 'counselor_id');
     }
+    public function application(User $user){
+        return $this->belongsTo(Application::class, $user);
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\API\BaseController;
 use App\Http\Requests\StoreLeadRequest;
 use App\Http\Requests\UpdateLeadRequest;
+use App\Http\Requests\UpdateStatusRequest;
 use App\Models\Lead;
 use App\Repositories\Interfaces\LeadRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
@@ -36,16 +37,16 @@ class LeadController extends BaseController
 
     public function show(Lead $lead)
     {
-        
+
         if (Gate::denies('view', $lead)) {
             return response()->json(['message' => 'Unauthorized.'], 403);
         }
-       
+
         $success['leads'] = $this->leadRepository->getLeadById($lead->id);
         return $this->sendResponse($success, 'Lead details showed successfully.', 200);
     }
 
-    public function counselorLeads() 
+    public function counselorLeads()
     {
         $success['leads'] = $this->leadRepository->getLeadByCounselor(Auth::user()->id);
         return $this->sendResponse($success, 'Lead details showed successfully.', 200);
@@ -60,17 +61,25 @@ class LeadController extends BaseController
             return response()->json(['message' => 'Unauthorized.'], 403);
         }
 
-         $success['lead'] = $this->leadRepository->updateLead($lead, $request->all());
-         return $this->sendResponse($success, 'Lead updated successfully.', 200);
+        $success['lead'] = $this->leadRepository->updateLead($lead, $request->all());
+        return $this->sendResponse($success, 'Lead updated successfully.', 200);
     }
 
     public function destroy(Lead $lead)
     {
-         
+
         if (Gate::denies('delete', $lead)) {
             return response()->json(['message' => 'Unauthorized.'], 403);
         }
         $this->leadRepository->deleteLead($lead->id);
         return response()->json(['message' => 'Lead deleted successfully', 200]);
+    }
+    public function updateStatus(UpdateStatusRequest $request, $id)
+    {
+        $lead         = Lead::findOrFail($id);
+        $lead->status = $request->status;
+        $lead->save();
+
+        return response()->json(['message' => 'Lead status updated successfully!']);
     }
 }
