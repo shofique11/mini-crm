@@ -8,9 +8,33 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+Route::post('/verify-2fa', function (Request $request) {
+    $request->validate([
+        'email' => 'required|email',
+        'code' => 'required|numeric',
+    ]);
+
+    $user = User::where('email', $request->email)->first();
+
+    if (!$user || $user->two_factor_code !== $request->code) {
+        return response()->json(['message' => 'Invalid code'], 401);
+    }
+
+    // Clear the code after successful verification
+    $user->forceFill(['two_factor_code' => null])->save();
+
+    return response()->json([
+        'message' => '2FA verification successful',
+        'token' => $user->createToken('auth-token')->plainTextToken, // Issue API token
+    ]);
+});
 
 
 Route::post('/register', [AuthController::class, 'register']);
