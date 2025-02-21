@@ -32,12 +32,8 @@ class TwoFactorCodeNotification extends Notification
     /**
      * Get the mail representation of the notification.
      */
-    public function toMail(object $notifiable): MailMessage
+    public function toMail($notifiable): MailMessage
     {
-        // return (new MailMessage)
-        //             ->line('The introduction to the notification.')
-        //             ->action('Notification Action', url('/'))
-        //             ->line('Thank you for using our application!');
         return (new MailMessage)
         ->subject('Your Two-Factor Authentication Code')
         ->line('Your 2FA code is: **' . $this->code . '**')
