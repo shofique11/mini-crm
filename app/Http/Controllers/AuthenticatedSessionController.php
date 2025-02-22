@@ -72,7 +72,8 @@ class AuthenticatedSessionController extends Controller
 
         return response()->json([
             'message' => '2FA verified successfully',
-            'token'   => $token
+            'token'   => $token,
+            'user'  => $user,
         ]);
     }
 }
