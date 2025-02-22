@@ -7,14 +7,17 @@ use App\Http\Controllers\LeadController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AuthenticatedSessionController;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/verify-2fa', [AuthenticatedSessionController::class, 'verify2FA']);
 
 Route::middleware('auth:api')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
